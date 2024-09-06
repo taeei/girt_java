@@ -1,5 +1,7 @@
 package ex10_work;
 
+import java.util.Scanner;
+
 public class WorkMain {
 	public static void main(String[] args) {
 		
@@ -12,7 +14,26 @@ public class WorkMain {
 		// >> hope
 		// 정답!
 		
-		String[] strArr = {"CHANGE", "HOPE", "VIEW"};
+		String[] strArr = {"CHANGE", "HOPE", "VIEW", "APPLE"};
+		
+		Scramble scramble = new Scramble(strArr); 
+		String answer = scramble.getAnswer(); // 정답
+		String question = scramble.scrambledWord(); // 정답을 섞은 문제
+		
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("문제 : " + question);
+		
+		while( true ) {
+			System.out.print(">> ");
+			if( sc.next().equalsIgnoreCase(answer) ) {
+				System.out.println("정답!!");
+			}else {
+				System.out.println("오답..");
+			}
+			
+			
+		}//while
 		
 	}//main
 }                                                       

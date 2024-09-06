@@ -7,10 +7,10 @@ public class WorkMain {
 		
 		Scanner sc = new Scanner(System.in);
 		System.out.print("입력 : ");
-		String str = sc.next();
+		String input = sc.next();
 		
 		Work1 w = new Work1();
-		w.change(str);
+//		w.getResult(input);
 		
 		
 	}//main

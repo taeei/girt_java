@@ -40,39 +40,53 @@ public class WorkMain {
 		
 		Scanner sc = new Scanner(System.in);
 		System.out.print("관광객 수 : ");
-		int num = sc.nextInt();
+		int n = sc.nextInt();
+		Guide guide = new Guide(n);
 		
 		Guest guest = new Guest();
-		Guide guide = new Guide();
 		
-		for(int i = 1; i <=num; i++) {
-			System.out.print("1. 이름: ");
-//			name[i] += sc.next();
-			System.out.print("2. 나이: ");
-			guest.guestAge(sc.nextInt());
+		for(int i = 0; i < n; i++) {
+			System.out.printf("%d. 이름: ", i+1);
+			guide.guest[i].setName( sc.next() );
+			
+			System.out.printf("%d. 나이: ", i+1);
+			guide.guest[i].setAge( sc.nextInt() );
 			System.out.println("---------------");
 		}
 		
 		
-		while(true) {
+		outer: while(true) {
 			System.out.println("1. 관광객 정보");
 			System.out.println("2. 목적지 변경");
 			System.out.println("etc. 종   료");
-			
 			System.out.println(">> ");
-			int n = sc.nextInt();
 			
-			switch(n) {
-			
+			switch(sc.nextInt()) {
 			case 1:			
-				guest.show();
+				for(int i = 0; i < n; i++) {
+					System.out.printf(
+							"%d.이름 : %s\n", i+1, guide.guest[i].getName());
+					
+					System.out.printf(
+							"%d.나이 : %s\n", i+1, guide.guest[i].getAge());
+					
+					System.out.printf(
+							"%d. 목적지 %s\n", i+1, guide.guest[i].getPoint());
+					
+					System.out.println("-----------");
+				}
 				break;
 				
 			case 2:
-				guide.changeP();
+				System.out.println("목적지 변경 : ");
+				Guide.point = sc.next();
+				System.out.println("----------------------");
+					
 				break;
+				
 			default:
-				break;
+				System.out.println("여행종료");
+				break outer;
 				
 			}//switch
 	
