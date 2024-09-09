@@ -21,8 +21,10 @@ public class Ex3_FileInout {
 			try {
 				fis = new FileInputStream(f);
 				
+				// fis에서 읽어온 내용을 b_read 배열에 1byte 단위로 저장
 				fis.read(b_read);
-
+				
+				// b_read 배열을 String문자열로 변환
 				String str = new String(b_read);
 				
 				System.out.println(str.trim());

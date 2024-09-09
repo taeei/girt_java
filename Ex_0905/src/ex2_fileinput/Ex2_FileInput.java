@@ -11,7 +11,7 @@ public class Ex2_FileInput {
 		String path = "c:/IOtest/test.txt";
 		File f = new File(path);
 		FileInputStream fis = null;
-		byte[] b_read = new byte[(int)f.length()];	//(int)f.length() 공백 없이 출력
+		byte[] b_read = new byte[(int)f.length()];	//(int)f.length() 만큼 공백 없이 출력 
 		
 		if( f.exists() ) {
 			

@@ -28,41 +28,50 @@ public class WorkMain {
 //		12회만에 정답!
 		
 		Scanner sc = new  Scanner(System.in);
-		Random rnd = new Random();
 		
 		String[] word = {"apple", "banana", "grape", "orange"}; 
 		
+		int rnd = new Random().nextInt(word.length);
 		
-		String word_p = "";
-		String correct = "";
+		PlayGame pg = new PlayGame();
+		int playCount = pg.play(word[rnd]);
 		
-		int n = rnd.nextInt(word.length);
-		word_p += word[n];
-		
-		System.out.println("***HANGMAN***");
-		System.out.print("Word : ");
-		for(int i = 0; i < word_p.length(); i++) {
-			System.out.print("☆");
-		}//for
+		HighScore his = new HighScore();
+		his.outputScore( playCount );
 		
 		
-		while(true) {
-			
-			System.out.print(" >> ");
-			String input = sc.next();
-			char in = input.charAt(0);
-			
-			System.out.print("Word : ");
-			for(int i = 0; i < word_p.length(); i++) {
-				if( in == word_p.charAt(i) ) {
-					correct += in;
-				}else {
-					correct += "☆";
-				}
-			}//for
-			
-			System.out.print(correct);
-		}//while
+		
+		
+//		String word_p = "";
+//		String correct = "";
+//		
+//		int n = rnd.nextInt(word.length);
+//		word_p += word[n];
+//		
+//		System.out.println("***HANGMAN***");
+//		System.out.print("Word : ");
+//		for(int i = 0; i < word_p.length(); i++) {
+//			System.out.print("☆");
+//		}//for
+//		
+//		
+//		while(true) {
+//			
+//			System.out.print(" >> ");
+//			String input = sc.next();
+//			char in = input.charAt(0);
+//			
+//			System.out.print("Word : ");
+//			for(int i = 0; i < word_p.length(); i++) {
+//				if( in == word_p.charAt(i) ) {
+//					correct += in;
+//				}else {
+//					correct += "☆";
+//				}
+//			}//for
+//			
+//			System.out.print(correct);
+//		}//while
 		
 		
 //		while(true) {

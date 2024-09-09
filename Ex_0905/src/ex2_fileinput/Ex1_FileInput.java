@@ -15,7 +15,7 @@ public class Ex1_FileInput {
 		File f = new File(path);
 		FileInputStream fis = null;
 		
-		if( f.exists() ) {
+		if( f.exists() ) {	// file 클래스가 참조하는 path경로가 물리적으로 존재한다면
 			
 			try {
 				fis = new FileInputStream(f);
@@ -26,12 +26,11 @@ public class Ex1_FileInput {
 				// 반복문을 수행한다
 				while( (code = fis.read()) != -1 ) {	
 					
-					char ch = (char)code;
+					char ch = (char)code;	// code값을 char로 변환해서 ch 저장
 					System.out.print(ch);
 					
 				}//while
-				
-				
+
 				
 			} catch (Exception e) { 
 				// TODO Auto-generated catch block

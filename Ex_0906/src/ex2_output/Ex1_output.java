@@ -7,7 +7,7 @@ public class Ex1_output {
 	public static void main(String[] args) {
 		
 		// PrintStream은 OutStream의 대표적인 자식클래스다
-		// 화면에 데이터를 출력핫기 위해 만들어져 있는 클래스
+		// 화면에 데이터를 출력하기 위해 만들어져 있는 클래스
 		
 		PrintStream ps = System.out;
 		ps.write(65);

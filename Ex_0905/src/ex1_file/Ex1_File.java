@@ -15,9 +15,10 @@ public class Ex1_File {
 		File f = new File(path);	// File클래스는 path까지 접근이 가능하다
 		
 		// 폴더랑 파일 여부 ㅇ확인
-		if( !f.isDirectory() ) {	// = f.isFile()
+		if( !f.isDirectory() ) {	// 폴더가 아니면 (파일이다 = f.isFile())
 			System.out.println( f.length() + "byte"); // f의 용량 : 한글 한 글자(2byte), 영어 한 글자(1byte)
 		}
+		
 		
 	}//main
 }

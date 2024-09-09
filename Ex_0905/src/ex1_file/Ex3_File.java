@@ -9,7 +9,7 @@ public class Ex3_File {
 		String path = "C:/java_kth/util/eclipse";
 		File parentFile = new File(path);
 		
-		if( !parentFile.isFile()) {		
+		if( !parentFile.isFile()) {		// parentFile이 파일이 아니라면
 			
 			File[] childFile = parentFile.listFiles();	// 파일 클래스로 가져와서
 			
