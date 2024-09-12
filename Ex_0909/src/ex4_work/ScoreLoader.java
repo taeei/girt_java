@@ -15,7 +15,7 @@ public class ScoreLoader {
 		String path = "c:/RspScore/" + id + "/userinfo.sav";
 		
 		File f = new File(path);
-		FileInputStream fis = null;
+		FileInputStream fis = null; 
 		ObjectInputStream ois = null;
 		
 		if( !f.exists() ) { 
