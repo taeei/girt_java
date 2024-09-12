@@ -5,9 +5,7 @@ import java.io.Serializable;
 public class GameUser implements Serializable {
 	
 	private String id;
-	private int win;
-	private int tie;
-	private int lose;
+	private int win, tie, lose;
 	
 	public String getId() {
 		return id;
