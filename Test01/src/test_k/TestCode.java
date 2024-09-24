@@ -46,9 +46,13 @@ public class TestCode extends JFrame {
 
 	static Frame f = new Frame();
 	static Frame bf = new Frame("장바구니");
+	static Frame pf = new Frame("결제");
 	static JPanel bp = new JPanel(); // 장바구니 레이블을 추가할 패널
 	static JPanel cartPanel = new JPanel(); // 장바구니 레이블을 추가할 패널
-	static JLabel[] cartLabels = new JLabel[12]; // 레이블 배열
+	static JPanel payPanel = new JPanel();
+	static JLabel[] cartLabels = new JLabel[12]; // 장바구니 레이블 배열
+	static JLabel[] payLabels = new JLabel[12]; // 결제 레이블 배열
+
 
 	public static void main(String[] args) {
 
@@ -67,14 +71,7 @@ public class TestCode extends JFrame {
 			}
 		});
 
-		bf.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-
-		});
-
+		
 		f.setVisible(true);
 		bf.setVisible(true);
 		f.toBack();
@@ -198,15 +195,21 @@ public class TestCode extends JFrame {
 
 		// 메뉴 버튼들 감지자
 		// bf 레이블에 정보 보내기
-		button.addActionListener(e -> {
-			if (isMain) {
-				mainCnt[index]++;
-				updateCartLabel(index, true);
-			} else {
-				sideCnt[index]++;
-				updateCartLabel(index, false);
+		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if (isMain) {
+					mainCnt[index]++;
+					updateCartLabel(index, true);
+				} else {
+					sideCnt[index]++;
+					updateCartLabel(index, false);
+				} 
 			}
 		});
+		
 		return button;
 	}
 
@@ -219,7 +222,7 @@ public class TestCode extends JFrame {
 		// 장바구니 패널 설정
 		cartPanel.setLayout(new BoxLayout(cartPanel, BoxLayout.Y_AXIS)); // 패널 수직으로 생성
 		cartPanel.setBounds(15, 115, 290, 425);
-		cartPanel.setBackground(Color.WHITE);
+		cartPanel.setBackground(Color.BLACK);
 
 		// 초기 레이블 생성
 		for (int i = 0; i < cartLabels.length; i++) {
@@ -233,25 +236,37 @@ public class TestCode extends JFrame {
 
 		JButton btn_pay = new JButton("주문하기");
 		btn_pay.setBounds(15, 545, 290, 70);
-		btn_pay.setFont(new Font("", Font.BOLD, 15));
+		btn_pay.setFont(new Font("", Font.BOLD, 18));
+		btn_pay.setBackground(Color.RED);
 
-		JButton reset = new JButton("장바구니 비우기");
-		reset.setBounds(15, 40, 290, 70);
-		reset.setFont(new Font("", Font.BOLD, 15));
+		JButton btn_reset = new JButton("장바구니 비우기");
+		btn_reset.setBounds(15, 40, 290, 70);
+		btn_reset.setFont(new Font("", Font.BOLD, 18));
+		btn_reset.setBackground(Color.RED);
 		
 		
 		JScrollPane cartScroll = new JScrollPane(cartPanel);
 		cartScroll.setBounds(15, 115, 290, 425);
 		cartScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
+		// 종료 버튼
+		bf.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+
+		});
+
+		
 		bf.add(cartScroll);
 		bf.add(btn_pay);
-		bf.add(reset);
+		bf.add(btn_reset);
 
 		bf.setVisible(true);
 
 		// 장바구니 비우기 버튼 감지자
-		reset.addActionListener(new ActionListener() {
+		btn_reset.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -259,39 +274,69 @@ public class TestCode extends JFrame {
 
 			}
 		});
+		
+		// 주문하기 버튼 감지자
+		btn_pay.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createPayFrame();
+				
+			}
+		});
 	}
 
 	
+
 	
 	
 	// 메뉴 버튼 클릭 시 장바구니 레이블 생성
 	private static void updateCartLabel(int index, boolean isMain) {
 
 		// 메인 메뉴인지 사이드 메뉴인지 구분
+		
 		String menuName = isMain ? mainName[index] : sideName[index];
 		int menuPrice = isMain ? mainPrice[index] : sidePrice[index];
 		int count = isMain ? mainCnt[index] : sideCnt[index];
 
 		JLabel cartLabel = cartLabels[index + (isMain ? 0 : mainCnt.length)];
 		
-		if(count > 0) {
+		if(count > 0) {	// 클릭수 > 0 일 때 만 레이블 생성
 			
-			cartLabel.setText(menuName + " : " + menuPrice  + "원" + " : " + count + "개");
+			cartLabel.setText("<html>" +
+		            "<div style='position: relative; width: 100px; height: 80spx; '>" +
+		            // Centered and positioned towards the top right for menuName, menuPrice, and 원
+		            "<div style='text-align: center; position: absolute; top: -20px; right: 10px;'>" +
+		            menuName + "<br>" + menuPrice + "원" +
+		            "</div>" +
+		            // Positioned towards the bottom right for count and 개
+		            "<div style='position: absolute; bottom: -5px; right: 10px;'>" +
+		            count + "개" +
+		            "</div>" +
+		            "</div>" +
+		            "</html>");
+			cartLabel.setForeground(Color.WHITE);
 			
 			// 이미지 사이즈 재정의
 			if (isMain) {
-				cartLabel.setIcon(resizeImage(mainIcons[index], 70, 70));
+				cartLabel.setIcon(resizeImage(mainIcons[index], 120, 120));
 			} else {
-				cartLabel.setIcon(resizeImage(sideIcons[index], 70, 70));
+				cartLabel.setIcon(resizeImage(sideIcons[index], 120, 120));
 			}
 			
+			
 			JButton plus = new JButton("+"); 
-			plus.setBounds(120, 50, 25, 25);
-			plus.setFont(new Font("", Font.BOLD, 5));
+			plus.setBounds(165, 80, 40, 30);
+			plus.setFont(new Font("", Font.BOLD, 10));
+			plus.setBackground(Color.WHITE);
+			plus.setHorizontalTextPosition(JButton.CENTER);
 			cartLabel.add(plus);
 			
-			JButton minus = new JButton("ab");
-			minus.setBounds(165, 50, 25, 25);
+			JButton minus = new JButton("-");
+			minus.setBounds(210, 80, 40, 30);
+			minus.setFont(new Font("", Font.BOLD, 10));
+			minus.setBackground(Color.WHITE);
+			plus.setHorizontalTextPosition(JButton.CENTER);
 			cartLabel.add(minus);
 			
 			// 플러스 버튼 감지자
@@ -302,12 +347,15 @@ public class TestCode extends JFrame {
 					if(isMain && mainCnt[index] > 0) {
 						mainCnt[index]++;
 						updateCartLabel(index, true);
+						
 					}else if(!isMain && sideCnt[index] > 0) {
 						sideCnt[index]++;
 						updateCartLabel(index, false);
-					}else {
-						updateCartLabel(index, isMain);
+						
 					}
+//					else {
+//						updateCartLabel(index, isMain);
+//					}
 					
 				}
 			});
@@ -320,23 +368,70 @@ public class TestCode extends JFrame {
 					if(isMain && mainCnt[index] > 0) {
 						mainCnt[index]--;
 						updateCartLabel(index, true);
+						
 					}else if(!isMain && sideCnt[index] > 0){
 						sideCnt[index]--;
 						updateCartLabel(index, false);
-					}else {
-						updateCartLabel(index, isMain);
+						
 					}
 					
 				}
 			});
 	
 		}else {
-			cartLabel.setText("");
-			cartLabel.setIcon(null);
-			cartLabel.setVisible(false);
+			
+			if(isMain) {
+				mainCnt[index] = 0;
+				cartLabel.setText("");
+				cartLabel.setIcon(null);
+			}else {
+				sideCnt[index] = 0;
+				cartLabel.setText("");
+				cartLabel.setIcon(null);
+			}
+			
 		}
 		
-		
+	}
+	
+	
+	// 결제 프레임 생성 메서드
+	private static void createPayFrame() {
+
+		pf.setLayout(null);
+		pf.setBounds(380, 270, 1005, 630);
+		pf.setBackground(Color.BLACK);
+
+		payPanel.setLayout(new BoxLayout(cartPanel, BoxLayout.Y_AXIS)); // 패널 수직으로 생성
+		payPanel.setBounds(15, 115, 950, 400);
+		payPanel.setBackground(Color.BLACK);
+
+		for (int i = 0; i < payLabels.length; i++) {
+			payLabels[i] = new JLabel();
+			payLabels[i].setForeground(Color.BLACK);
+			payLabels[i].setFont(new Font("", Font.BOLD, 13));
+			payLabels[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // 레이블 간격 설정
+			payPanel.add(payLabels[i]);
+		}
+
+		JScrollPane payScroll = new JScrollPane(payPanel);
+		payScroll.setBounds(15, 115, 950, 400);
+		payScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+		// 종료
+		pf.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				pf.dispose();
+			}
+
+		});
+
+		pf.add(cartPanel);
+		pf.add(payScroll);
+
+		pf.setVisible(true);
+
 	}
 	
 
@@ -349,13 +444,18 @@ public class TestCode extends JFrame {
 
 	// 장바구니 비우기
 	private static void clearCart() {
-		mainCnt = new int[6]; // 클릭 횟수 초기화
-		sideCnt = new int[6]; // 클릭 횟수 초기화
+		// 클릭 횟수 초기화
+		mainCnt = new int[6]; 
+		sideCnt = new int[6]; 
+		// 장바구니 글씨, 사진 초기화
 		for (JLabel label : cartLabels) {
-			label.setText(""); // 장바구니 글씨 초기화
-			label.setIcon(null); // 장바구니 사진 초기화
+			label.setText(""); 
+			label.setIcon(null); 
 
 		}
 	}
+	
+	
+	
 
 }
