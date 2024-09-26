@@ -33,7 +33,7 @@ public class Ex1_work {
 		
 //		money = 500*bread + 700*shrimp + 400*coke;
 		
-		for( int i = 1; money - i * bread >= 0 ; i++) {
+		for( int i = 1; money - (i * bread) >= 0 ; i++) {
 			
 			for( int j = 1; money - j * shrimp > 0; j++) {
 				

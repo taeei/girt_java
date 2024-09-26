@@ -4,9 +4,9 @@ public class Ex3_work {
 	public static void main(String[] args) {
 		
 		
-		//        *
-		//      * * *  
-		//    * * * * * 
+		//         *
+		//       * * *  
+		//     * * * * * 
 		//   * * * * * * * 
 		// * * * * * * * * * 
 		

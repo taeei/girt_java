@@ -39,6 +39,7 @@ public class TestCode extends JFrame {
 	static int sideCnt[] = new int[6];
 	static String[] mainName = { "가라아게", "밀푀유나베", "술찜", "오코노미야끼", "차돌숙주볶음", "한우타다끼" };
 	static String[] sideName = { "계란말이", "고구마튀김", "문어튀김", "숯불꼬치", "타코와사비", "해물떡볶이" };
+	static String[] drink = { };
 	static int[] mainPrice = { 23000, 28000, 27000, 24000, 24000, 28000 };
 	static int[] sidePrice = { 15000, 13000, 26000, 29000, 29000, 26000 };
 	static ImageIcon[] mainIcons = new ImageIcon[6];
@@ -46,13 +47,14 @@ public class TestCode extends JFrame {
 
 	static Frame f = new Frame();
 	static Frame bf = new Frame("장바구니");
-	static Frame pf = new Frame("결제");
+	static JFrame pf = new JFrame("결제");
 	static JPanel bp = new JPanel(); // 장바구니 레이블을 추가할 패널
 	static JPanel cartPanel = new JPanel(); // 장바구니 레이블을 추가할 패널
 	static JPanel payPanel = new JPanel();
 	static JLabel[] cartLabels = new JLabel[12]; // 장바구니 레이블 배열
 	static JLabel[] payLabels = new JLabel[12]; // 결제 레이블 배열
 
+	static int totalPrice;
 
 	public static void main(String[] args) {
 
@@ -212,6 +214,8 @@ public class TestCode extends JFrame {
 		
 		return button;
 	}
+	
+// ------------------------------------------------------------------------------------
 
 	// 장바구니 프레임 생성 메서드
 	private static void createCartFrame() {
@@ -282,13 +286,12 @@ public class TestCode extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				createPayFrame();
 				
+				
+				
 			}
 		});
 	}
 
-	
-
-	
 	
 	// 메뉴 버튼 클릭 시 장바구니 레이블 생성
 	private static void updateCartLabel(int index, boolean isMain) {
@@ -394,45 +397,9 @@ public class TestCode extends JFrame {
 		
 	}
 	
+// ---------------------------------------------------------------------------------------
 	
-	// 결제 프레임 생성 메서드
-	private static void createPayFrame() {
-
-		pf.setLayout(null);
-		pf.setBounds(380, 270, 1005, 630);
-		pf.setBackground(Color.BLACK);
-
-		payPanel.setLayout(new BoxLayout(cartPanel, BoxLayout.Y_AXIS)); // 패널 수직으로 생성
-		payPanel.setBounds(15, 115, 950, 400);
-		payPanel.setBackground(Color.BLACK);
-
-		for (int i = 0; i < payLabels.length; i++) {
-			payLabels[i] = new JLabel();
-			payLabels[i].setForeground(Color.BLACK);
-			payLabels[i].setFont(new Font("", Font.BOLD, 13));
-			payLabels[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // 레이블 간격 설정
-			payPanel.add(payLabels[i]);
-		}
-
-		JScrollPane payScroll = new JScrollPane(payPanel);
-		payScroll.setBounds(15, 115, 950, 400);
-		payScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-		// 종료
-		pf.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				pf.dispose();
-			}
-
-		});
-
-		pf.add(cartPanel);
-		pf.add(payScroll);
-
-		pf.setVisible(true);
-
-	}
+	
 	
 
 	// 이미지 사이즈 재정의 메서드
@@ -454,6 +421,110 @@ public class TestCode extends JFrame {
 
 		}
 	}
+	
+	
+	// 결제 프레임 생성 메서드
+	private static void createPayFrame() {
+		
+		pf.setLayout(null);
+		pf.setBounds(380, 270, 1005, 630);
+		pf.setBackground(Color.BLACK);
+		
+		payPanel.removeAll();
+		
+		payPanel.setLayout(new BoxLayout(payPanel, BoxLayout.Y_AXIS)); // 패널 수직으로 생성
+		payPanel.setBounds(10, 115, 980, 400);
+		payPanel.setBackground(Color.BLACK);
+		
+		payPanel.removeAll(); // 기존 레이블 제거
+		for (int i = 0; i < payLabels.length; i++) {
+			payLabels[i] = new JLabel();
+			payLabels[i].setForeground(Color.BLACK);
+			payLabels[i].setFont(new Font("", Font.BOLD, 18));
+			payLabels[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // 레이블 간격 설정
+			payPanel.add(payLabels[i]);
+		}
+		
+		// 총가격 레이블
+		JLabel totalLabel = new JLabel();
+	    totalLabel.setForeground(Color.WHITE);
+	    totalLabel.setFont(new Font("", Font.BOLD, 20));
+	    payPanel.add(totalLabel); // Add totalLabel to payPanel
+		
+		JScrollPane payScroll = new JScrollPane(payPanel);
+		payScroll.setBounds(10, 115, 980, 400);
+		payScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		// 종료
+		pf.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				pf.setVisible(false);
+			}
+			
+		});
+	
+		pf.getContentPane().removeAll();
+		
+		pf.add(payScroll);
+//		pf.revalidate(); 
+//		pf.repaint();
+		
+		updatePayLabel(totalLabel);
+		pf.setVisible(true);
+		
+	}
+	
+	// 결체창에서 메뉴 레이블 생성 메서드
+	public static void updatePayLabel(JLabel totalLabel) {
+		
+		int totalPrice = 0;
+        int index = 0;  
+
+        // 메인 메뉴 정보 결제 창으로 복사
+        for (int i = 0; i < mainCnt.length; i++) {
+            if (mainCnt[i] > 0) {  // 메인 메뉴가 장바구니에 추가된 경우만
+                String menuInfo = "<html><div style='text-align: center;'>" +
+                        "<span style='padding-right: 30px;'>" + mainName[i] + "</span>" +  // 메뉴 이름과 간격
+                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +  // 메뉴 이름과 가격 사이 간격
+                        "<span style='padding-right: 30px;'>" + mainPrice[i] + "원</span>" +  // 가격과 간격
+                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +  // 가격과 수량 사이 간격
+                        "<span>" + mainCnt[i] + "개</span>" +  // 수량
+                        "</div></html>";
+                payLabels[index].setText(menuInfo);  // 결제 레이블에 메뉴 정보 설정
+                payLabels[index].setForeground(Color.WHITE);  // 텍스트 색상 설정
+                totalPrice += mainPrice[i] * mainCnt[i];	// 총가격
+                index++;  // 다음 레이블로 이동
+            }
+        }
+
+        // 사이드 메뉴 정보 결제 창으로 복사
+        for (int i = 0; i < sideCnt.length; i++) {
+            if (sideCnt[i] > 0) {  // 사이드 메뉴가 장바구니에 추가된 경우만
+            	String menuInfo = "<html><div style='text-align: center;'>" +
+                        "<span style='padding-right: 30px;'>" + sideName[i] + "</span>" +  // 메뉴 이름과 간격
+                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +  // 메뉴 이름과 가격 사이 간격
+                        "<span style='padding-right: 30px;'>" + sidePrice[i] + "원</span>" +  // 가격과 간격
+                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +  // 가격과 수량 사이 간격
+                        "<span>" + sideCnt[i] + "개</span>" +  // 수량
+                        "</div></html>";
+                payLabels[index].setText(menuInfo);  // 결제 레이블에 메뉴 정보 설정
+                payLabels[index].setForeground(Color.WHITE);  // 텍스트 색상 설
+                totalPrice += sidePrice[i] * sideCnt[i];	// 총가격
+                index++;  // 다음 레이블로 이동
+            }
+        }
+        
+        totalLabel.setText("<html><div style='text-align: center;'>" +
+                "<span style='font-weight: bold;'>총 가격: " + totalPrice + "원</span>" +
+                "</div></html>");
+
+        // 남은 payLabels 비우기 (이전 정보가 남지 않도록)
+        for (int i = index; i < payLabels.length; i++) {
+            payLabels[i].setText("");  // 결제 레이블 비우기
+        }
+            
+   	}
 	
 	
 	

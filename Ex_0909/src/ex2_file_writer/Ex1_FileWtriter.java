@@ -14,6 +14,7 @@ public class Ex1_FileWtriter {
 			fw = new FileWriter(f, true);
 			String str = "\n두번째 줄";
 			fw.write( str );
+			fw.write("test");
 			
 			
 		} catch (Exception e) {
